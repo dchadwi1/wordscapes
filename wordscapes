@@ -85,3 +85,8 @@ def main():
 			real_valid_words.append(word)
 
 	print(real_valid_words)
+	
+
+
+
+main()
