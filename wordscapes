@@ -1,0 +1,87 @@
+from itertools import permutations 
+import pprint
+import enchant
+
+def lensort(a):
+    n = len(a)
+    for i in range(n):
+        for j in range(i+1,n):
+            if len(a[i]) > len(a[j]):
+                temp = a[i]
+                a[i] = a[j]
+                a[j] = temp
+    return a
+
+
+
+def power_set(input):
+    # returns a list of all subsets of the list a
+    if (len(input) == 0):
+        return [[]]
+    else:
+        main_subset = [ ]
+        for small_subset in power_set(input[1:]):
+            main_subset += [small_subset]
+            main_subset += [[input[0]] + small_subset]
+        return main_subset
+
+def non_vowel_remove(list):
+	new_list = []
+	vowels = ['a', 'e', 'i', 'o', 'u', 'y']
+	for element in list:
+		no_vowels = 0
+		for vowel in vowels:
+			if(vowel in element):
+				no_vowels = 1
+		if(no_vowels == 1):
+			new_list.append(element)
+	return new_list
+
+
+def permutation(list):
+	new_list = []
+	for i in range(len(list)):
+		perm = permutations(list[i])
+		for i in perm:
+			new_list.append(i)
+
+	return new_list
+	
+
+
+
+def main():
+	test_str = "bleam"
+	list = power_set(test_str)
+	list = lensort(list)
+
+	new_list = []
+
+	#remove where size is greater than 2
+	for i in range(len(list)):
+		if(len(list[i]) > 2 and len(list[i]) < 7):
+			new_list.append(list[i])
+
+
+	new_list = non_vowel_remove(new_list)
+
+	itertools_list = permutation(new_list)
+
+	perm_list = []
+
+	for perm in itertools_list:
+		perm_list.append(''.join(perm))
+
+	
+	valid_words = []
+	d = enchant.Dict("en_US")
+	for i in perm_list:
+		if(d.check(i)):
+			valid_words.append(i)
+	
+	real_valid_words = []
+	for word in valid_words:
+		if(word not in real_valid_words):
+			real_valid_words.append(word)
+
+	print(real_valid_words)
